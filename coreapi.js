@@ -13,7 +13,46 @@ var currentPathInfo = null;
 let alerts = []
 let intervals = []
 
+// Session class (login etc)
+
+// session (not just state data
+
+class Session {
+	constructor() {
+		if(localStorage.session) {
+			try {
+				this._state = JSON.parse(localStorage.session)
+			} catch {
+				this._state = {}
+			}
+		} else {
+			this._state = {}
+		}
+		
+		this._h = {
+			get: (obj, i) => {
+				return this._state[i] || undefined
+			},
+			set: (obj, i, v) => {
+				this._state[i] = v
+                		localStorage.session = JSON.stringify(this._state)
+			}
+		}
+
+		this.state = new Proxy({}, this._h);
+	}
+
+	getState(this) {
+		return this._state
+	}
+}
+
+var $rump = new Session()
+
 // APIs
+
+// Simple polyfill for promisify
+const promisify = f => (...args) => new Promise((a,b)=>f(...args, (err, res) => err ? b(err) : a(res)));
 
 // Public API to try returning data
 function tryReturn(f, ...args) {
