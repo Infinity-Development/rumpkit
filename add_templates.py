@@ -21,7 +21,14 @@ subfolders, files = run_fast_scandir("..")
 
 with open("template/index.html") as f:
     r = f.read()
+
+    if os.path.exists("static/ext.css"):
+        r = r.replace("$extstyle", """<link rel="stylesheet" href="/static/ext.css?n=$ver" />""")
+    else:
+        r = r.replace("$extstyle", "")
+
     r = r.replace("$ver", str(uuid.uuid4()))
+
 
 tmpid = uuid.uuid4()
 
