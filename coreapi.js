@@ -55,6 +55,19 @@ class Session {
 var $rump = new Session()
 
 // APIs
+const log = (...args) => {
+	console[args[0]](`%c[MAIN ${Date.now()}]%c[${args[1]}]%c`, "color:red;font-weight:bold;", "color:purple;font-weight:bold;", "", ...args.slice(2))
+}
+
+// Custom logger
+["log", "debug", "info", "warn", "error"].forEach((method) => {
+    self[method] = function(...args) {
+        args.unshift(method)
+        log(...args)
+    }
+})
+
+
 
 // Simple polyfill for promisify and sleep
 const promisify = f => (...args) => new Promise((a,b)=>f(...args, (err, res) => err ? b(err) : a(res)));
