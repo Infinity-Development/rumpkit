@@ -185,6 +185,8 @@ function _linkMod() {
 async function loadService(path) {
 	let pathInfo = getPathInfo(path)
 
+	currentPathInfo = pathInfo
+
 	setStatus("Loading service [aux.js]")
 
 	// Load aux.js
@@ -219,8 +221,6 @@ async function loadService(path) {
         }
 
 	document.title = title
-
-	currentPathInfo = pathInfo
 
 	setStatus("")
 
