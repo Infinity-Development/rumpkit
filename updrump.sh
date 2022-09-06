@@ -1,4 +1,4 @@
-mkdir -p $1
+add_templates.py
 rm -rf rumpkit
 git clone https://github.com/Infinitybotlist/rumpkit
 cp -rf rumpkit/* $1
