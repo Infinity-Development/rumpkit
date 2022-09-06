@@ -42,7 +42,7 @@ class Session {
 		this.state = new Proxy({}, this._h);
 	}
 
-	getState(this) {
+	getState() {
 		return this._state
 	}
 }
