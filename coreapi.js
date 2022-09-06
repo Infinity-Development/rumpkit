@@ -45,6 +45,11 @@ class Session {
 	getState() {
 		return this._state
 	}
+
+	clearState() {
+		localStorage.session = "{}"
+		this._state = "{}"
+	}
 }
 
 var $rump = new Session()
