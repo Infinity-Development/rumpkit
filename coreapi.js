@@ -51,8 +51,9 @@ var $rump = new Session()
 
 // APIs
 
-// Simple polyfill for promisify
+// Simple polyfill for promisify and sleep
 const promisify = f => (...args) => new Promise((a,b)=>f(...args, (err, res) => err ? b(err) : a(res)));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // Public API to try returning data
 function tryReturn(f, ...args) {
