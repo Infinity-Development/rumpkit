@@ -281,8 +281,10 @@ async function load() {
 	setStatus("Loading core data")
 	
 	// TODO: Find better way of handling this
-	if(window.location.origin.endsWith("infinitybots.gg") setTimeout(_maintLdr, 300)
-	
+	if(window.location.origin.endsWith("infinitybots.gg")) {
+		setTimeout(_maintLdr, 300)
+	}
+
 	loadService(window.location.pathname)
 }
 
