@@ -19,6 +19,8 @@ def run_fast_scandir(dir):    # dir: str, ext: list
 
 subfolders, files = run_fast_scandir("..")
 
+files_b = files
+
 with open("template/index.html") as f:
     r = f.read()
 
@@ -66,3 +68,14 @@ try:
 except OSError:
     pass
 
+print("BUILD: Attempting to minify .js files")
+
+# https://stackoverflow.com/questions/2556108/rreplace-how-to-replace-the-last-occurrence-of-an-expression-in-a-string
+def rreplace(s, old, new, count):
+    return (s[::-1].replace(old[::-1], new[::-1], count))[::-1]
+
+
+for file in files:
+    if file.endswith(".js"):
+        print("Minifying+optimizing", file)
+        os.system(f"google-closure-compiler --js {file} --js_output_file {rreplace(file, '.js', '.min.js', 1)}")
