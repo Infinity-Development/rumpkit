@@ -84,8 +84,6 @@ function tryReturn(f, ...args) {
 // Public API to replace current url without reload, pass empty string to use currentPathInfo.url
 function setAddressBar(url = "") {
 	window.history.replaceState({"prev": window.location.href}, "Panel", url || currentPathInfo.url);
-
-	replaceState(stateObj, unused)
 }
 
 // Public API to send critical errors
