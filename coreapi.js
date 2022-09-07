@@ -67,8 +67,6 @@ const log = (...args) => {
     }
 })
 
-
-
 // Simple polyfill for promisify and sleep
 const promisify = f => (...args) => new Promise((a,b)=>f(...args, (err, res) => err ? b(err) : a(res)));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -81,6 +79,13 @@ function tryReturn(f, ...args) {
         	console.error(err)
         	console.error("coreapi.js failed with a critical error")
 	}
+}
+
+// Public API to replace current url without reload, pass empty string to use currentPathInfo.url
+function setAddressBar(url = "") {
+	window.history.replaceState({"prev": window.location}, "Panel", url || currentPathInfo.url);
+
+	replaceState(stateObj, unused)
 }
 
 // Public API to send critical errors
@@ -139,7 +144,8 @@ function getPathInfo(path) {
 	return {
 		service: `${path}/+route/service.js`,
 		aux: `${path}/+route/aux.js`, // Auxillary data
-		data: `${path}/+data`
+		data: `${path}/+data`,
+		url: path
 	}
 }
 
