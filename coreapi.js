@@ -97,9 +97,9 @@ function setStatus(text) {
 	document.querySelector("#status").innerHTML = marked.marked(text)
 }
 
-// Public API to set main body
+// Public API to set main body, special variables are unwrapped as well
 function setBody(text) {
-        document.querySelector("#body").innerHTML = marked.marked(text)
+        document.querySelector("#body").innerHTML = marked.marked(text.replaceAll("$data", currentPathInfo.data))
 	setStatus("")
 }
 
