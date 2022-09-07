@@ -33,10 +33,10 @@ subfolders, files = run_fast_scandir("..")
 
 
 for file in files:
-    _file = file.replace(f"../", "", 1).replace(cwd, "", 1)
+    _file = file.replace(f"../", "", 1).replace(cwd, "", 1).replace("/", "", 1)
     if _file.endswith(".min.js"):
         print(_file)
         silentremove(_file)
-    if _file == "/index.html":
+    if "index.html" in _file and not file.startswith("template"):
         print(_file)
         silentremove(_file)

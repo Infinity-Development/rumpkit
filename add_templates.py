@@ -76,7 +76,7 @@ def rreplace(s, old, new, count):
 
 
 for file in files:
-    _file = file.replace(f"../", "", 1).replace(cwd, "", 1)
+    _file = file.replace(f"../", "", 1).replace(cwd, "", 1).replace("/", "", 1)
     if _file.endswith(".js"):
         print("Minifying+optimizing", _file)
         os.system(f"google-closure-compiler --js {_file} --js_output_file {rreplace(_file, '.js', '.min.js', 1)}")
