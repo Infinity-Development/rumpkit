@@ -98,8 +98,11 @@ function setStatus(text) {
 }
 
 // Public API to set main body, special variables are unwrapped as well
+// $n => unwraps to a nonce
+// $data => unwraps to ``currentPathInfo.data``
 function setBody(text) {
-        document.querySelector("#body").innerHTML = marked.marked(text.replaceAll("$data", currentPathInfo.data))
+	let n = Math.floor(Math.random() * 100000);
+        document.querySelector("#body").innerHTML = marked.marked(text.replaceAll("$data", currentPathInfo.data).replaceAll("$n", n))
 	setStatus("")
 }
 
