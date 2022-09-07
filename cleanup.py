@@ -25,6 +25,9 @@ def run_fast_scandir(dir):    # dir: str, ext: list
         files.extend(f)
     return subfolders, files
 
+cwd = os.getcwd().split("/")[-1]
+print("Rumpkit\nCurrent folder:", cwd)
+
 
 subfolders, files = run_fast_scandir("..")
 
