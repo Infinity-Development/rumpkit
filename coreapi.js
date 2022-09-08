@@ -11,6 +11,7 @@ class Session {
 	constructor() {
 		// Core variables
 		this.title = null
+		this.middleware = null
 		this.service = null 
 		this.firstload = null
 		this.path = null
@@ -241,7 +242,13 @@ async function loadService(path) {
 
 	setStatus("")
 
-	// Call the service
+	// Call the middleware+service
+	if($rump.middleware) {
+		let res = await $rump.middleware()
+		if(!res) {
+			return
+		}
+	}
 	await $rump.service()
 
 	setTimeout(_linkMod, 100)
