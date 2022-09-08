@@ -102,3 +102,5 @@ for file in files:
     if _file.endswith(".js") and not _file.endswith(".min.js"):
         print("Minifying+optimizing", _file)
         os.system(f"google-closure-compiler --js {_file} --js_output_file out/{rreplace(_file, '.js', '.min.js', 1)}")
+
+print("\n\nThe 'out' folder can be served")
