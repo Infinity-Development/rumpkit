@@ -1,15 +1,5 @@
 // Global variables
 
-// Must be exposed in service.js
-var service = () => {
-
-}
-var title = null
-
-// Exposed by loadService
-var currentPathInfo = null;
-
-// alert
 let alerts = []
 let intervals = []
 
@@ -19,6 +9,11 @@ let intervals = []
 
 class Session {
 	constructor() {
+		// Core variables
+		this.title = null
+		this.service = null 
+		this.path = null
+		
 		if(localStorage.session) {
 			try {
 				this._state = JSON.parse(localStorage.session)
@@ -40,6 +35,13 @@ class Session {
 		}
 
 		this.state = new Proxy({}, this._h);
+	}
+	
+	
+	_clearService() {
+                this.title = null
+                this.service = null 
+                this.path = null
 	}
 
 	getState() {
@@ -81,15 +83,9 @@ function tryReturn(f, ...args) {
 	}
 }
 
-// Public API to replace current url without reload, pass empty string to use currentPathInfo.url
+// Public API to replace current url without reload, pass empty string to use path.url
 function setAddressBar(url = "") {
-	window.history.replaceState({"prev": window.location.href}, "Panel", url || currentPathInfo.url);
-}
-
-// Public API to send critical errors
-function error(...args) {
-	console.error(...args)
-	alert(...args)
+	window.history.replaceState({"prev": window.location.href}, "Panel", url || $rump.path.url);
 }
 
 // Public API to set status
@@ -99,10 +95,10 @@ function setStatus(text) {
 
 // Public API to set main body, special variables are unwrapped as well
 // $n => unwraps to a nonce
-// $data => unwraps to ``currentPathInfo.data``
+// $data => unwraps to ``path.data``
 function setBody(text) {
 	let n = Math.floor(Math.random() * 100000);
-        document.querySelector("#body").innerHTML = marked.marked(text.replaceAll("$data", currentPathInfo.data).replaceAll("$n", n))
+        document.querySelector("#body").innerHTML = marked.marked(text.replaceAll("$data", $rump.path.data).replaceAll("$n", n))
 	setStatus("")
 }
 
@@ -159,7 +155,8 @@ async function _loadFetch(path, critical) {
 
         if(!jsServiceResp || !jsServiceResp.ok) {
 		if(critical) {
-                	error(`loadService error: could not load ${path}`)
+                	alert(`loadService error: could not load ${path}`)
+			return
 		}
                 return;
         }
@@ -205,7 +202,9 @@ function _linkMod() {
 async function loadService(path) {
 	let pathInfo = getPathInfo(path)
 
-	currentPathInfo = pathInfo
+	$rump._clearService()
+
+	$rump.path = pathInfo
 
 	setStatus("Loading service [aux.js]")
 
@@ -224,28 +223,25 @@ async function loadService(path) {
 	if(!jsService) {
 		return -1;
 	}
-
-	service = null; // Reset service
-	title = null
-
+	
 	globalEval(jsService);
 
-	if(!service) {
-		error(`loadService error: ${pathInfo.service} does not expose a service() function`)
+	if(!$rump.service) {
+		alert(`loadService error: ${pathInfo.service} does not expose a service function`)
 		return -2
 	}
 
-        if(!title) {
+        if(!$rump.title) {
                 error(`loadService error: ${pathInfo.service} does not expose a title`)
                 return -2
         }
 
-	document.title = title
+	document.title = $rump.title
 
 	setStatus("")
 
 	// Call the service
-	await service()
+	await $rump.service()
 
 	setTimeout(_linkMod, 100)
 }
@@ -256,7 +252,7 @@ async function commonService(pathOpt) {
         // Avoid caching
         let n = Math.floor(Math.random() * 10000);
 
-        let content = await fetch(`${currentPathInfo.data}/${path}?n=${n}`)
+        let content = await fetch(`${$rump.path.data}/${path}?n=${n}`)
 
         let text = await content.text()
 
