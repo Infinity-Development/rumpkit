@@ -12,6 +12,7 @@ class Session {
 		// Core variables
 		this.title = null
 		this.service = null 
+		this.firstload = null
 		this.path = null
 		
 		if(localStorage.session) {
@@ -259,52 +260,12 @@ async function commonService(pathOpt) {
 	setBody(text)
 }
 
-// Internal function to handle maintenances
-async function _maintLdr() {
-        // Avoid caching
-        let n = Math.floor(Math.random() * 10000);
-
-	let maintResp = await _loadFetch(`https://sovngarde.infinitybots.gg/maints?n=${n}`)
-	
-	if(!maintResp) {
-		console.warning("No maintenances found")
-		return
-	}
-
-	let maint = JSON.parse(maintResp)
-
-	maint.forEach(m => {
-		let n = Math.floor(Math.random() * 10000);
-		alert(`m-${n}`, m.title, m.description)
-
-		// maintEl
-		let maintEl = document.createElement("div")
-		maintEl.classList.add("maint")
-
-		// title element
-		let mTitle = document.createElement("h3")
-		mTitle.classList.add("maint-title")
-		mTitle.innerHTML = m.title
-		maintEl.appendChild(mTitle)
-
-		// description element
-                let mDesc = document.createElement("span")
-                mDesc.classList.add("maint-desc")
-                mDesc.innerHTML = m.description
-                maintEl.appendChild(mDesc)
-
-
-		document.querySelector("#nav").appendChild(maintEl)
-	})
-}
-
 // Load function
 async function load() {
 	setStatus("Loading core data")
 	
-	// TODO: Find better way of handling this
-	if(window.location.origin.endsWith("infinitybots.gg")) {
-		setTimeout(_maintLdr, 300)
+	if($rump.firstload) {
+		setTimeout($rump.firstload, 300)
 	}
 
 	loadService(window.location.pathname)
