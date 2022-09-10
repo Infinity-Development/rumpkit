@@ -286,6 +286,11 @@ async function commonService(pathOpt) {
 	setBody(text.replaceAll("$data", $rump.path.data))
 }
 
+// Public API to parse text substituing our defined variables
+function parseText(text) {
+	return text.replaceAll("$data", $rump.path.data)
+}
+
 // Load function
 async function load() {
 	setStatus("Loading core data")
