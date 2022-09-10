@@ -283,7 +283,7 @@ async function commonService(pathOpt) {
 
         let text = await content.text()
 
-	setBody(text)
+	setBody(text.replaceAll("$data", $rump.path.data))
 }
 
 // Load function
